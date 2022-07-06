@@ -14,6 +14,7 @@ NSMutableArray *activities = nil;
 
 RCT_EXPORT_METHOD(becomeCurrent:(NSNumber * _Nonnull)activityId type:(NSString *)type title:(NSString *)title url:(NSString *)url)
 {
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     NSUserActivity* activity = [[NSUserActivity alloc] initWithActivityType:type];
     activity.title = title;
     activity.webpageURL = [[NSURL alloc] initWithString:url];
@@ -21,6 +22,7 @@ RCT_EXPORT_METHOD(becomeCurrent:(NSNumber * _Nonnull)activityId type:(NSString *
     [activity becomeCurrent];
 
     [[self activityList] addObject:@{ @"id": activityId, @"activity": activity }];
+  });
 }
 
 RCT_EXPORT_METHOD(invalidate:(NSNumber * _Nonnull)i)
